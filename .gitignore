@@ -1,0 +1,11 @@
+.DS_Store
+*.log
+*.pid
+node_modules/
+dist/
+.netlify/
+.vercel/
+supabase/.temp/
+.env
+.env.*
+!.env.example

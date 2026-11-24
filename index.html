@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Barbería Mariano Martínez</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero" aria-label="Reserva de turnos">
+        <div class="brand-bar">
+          <div class="brand-mark">
+            <img src="./assets/logo-mariano-martinez.jpeg" alt="Logo Mariano Martínez" />
+          </div>
+          <div>
+            <p class="eyebrow">Reservas online</p>
+            <h1>Barbería Mariano Martínez</h1>
+          </div>
+        </div>
+
+        <div class="hero-copy">
+          <p class="kicker">Barber studio</p>
+          <h2>Elegí un horario libre y confirmá tu turno.</h2>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <nav class="tabs" aria-label="Secciones">
+          <button class="tab active" data-view="client">Reservar</button>
+          <button class="tab" data-view="admin">Administrar</button>
+        </nav>
+
+        <section id="clientView" class="view active" aria-label="Formulario de reserva">
+          <div class="booking-layout">
+            <form id="bookingForm" class="panel">
+              <div class="panel-heading">
+                <p class="section-label">Nuevo turno</p>
+                <h3>Datos de la reserva</h3>
+              </div>
+
+              <label>
+                Servicio
+                <select id="serviceSelect" required></select>
+              </label>
+
+              <label>
+                Fecha
+                <input id="dateInput" type="date" required />
+              </label>
+
+              <div>
+                <div class="field-title">Horarios disponibles</div>
+                <div id="slotsGrid" class="slots-grid" aria-live="polite"></div>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  Nombre
+                  <input id="clientName" type="text" autocomplete="name" required />
+                </label>
+                <label>
+                  Email
+                  <input id="clientEmail" type="email" autocomplete="email" required />
+                </label>
+                <label>
+                  Teléfono
+                  <input id="clientPhone" type="tel" autocomplete="tel" required />
+                </label>
+              </div>
+
+              <label class="checkbox-label client-memory-option">
+                <input id="rememberClientData" type="checkbox" />
+                Recordar mis datos en este dispositivo
+              </label>
+
+              <label>
+                Nota opcional
+                <textarea id="clientNote" rows="3" placeholder="Ej: barba corta, llegaré 5 min antes"></textarea>
+              </label>
+
+              <div id="bookingSummary" class="booking-summary" aria-live="polite"></div>
+              <button class="primary-action" type="submit">Confirmar turno</button>
+              <p id="bookingMessage" class="message" role="status"></p>
+              <div id="confirmationBox" class="confirmation-box hidden" aria-live="polite"></div>
+            </form>
+            <section id="locationBox" class="location-box panel hidden" aria-label="Ubicación"></section>
+          </div>
+        </section>
+
+        <section id="manageView" class="view" aria-label="Gestionar reserva">
+          <div class="booking-layout">
+            <section class="panel">
+              <div class="panel-heading">
+                <p class="section-label">Gestionar turno</p>
+                <h3>Tu reserva</h3>
+              </div>
+
+              <div id="manageReservationSummary" class="notice-box"></div>
+
+              <div class="panel-heading compact-heading">
+                <p class="section-label">Modificar turno</p>
+                <h3>Elegí una nueva fecha y horario</h3>
+              </div>
+
+              <label>
+                Servicio
+                <select id="manageServiceSelect"></select>
+              </label>
+
+              <label>
+                Nueva fecha
+                <input id="manageDateInput" type="date" />
+              </label>
+
+              <div>
+                <div class="field-title">Horarios disponibles</div>
+                <div id="manageSlotsGrid" class="slots-grid" aria-live="polite"></div>
+              </div>
+
+              <div id="manageChangePreview" class="change-preview" aria-live="polite"></div>
+
+              <div class="form-actions">
+                <button id="rescheduleButton" class="primary-action" type="button">Confirmar nuevo turno</button>
+                <button id="cancelManageButton" class="danger-action" type="button">Cancelar turno</button>
+              </div>
+              <p id="manageMessage" class="message" role="status"></p>
+            </section>
+
+            <aside class="panel summary-panel">
+              <div class="panel-heading">
+                <p class="section-label">Estado</p>
+                <h3>Acciones</h3>
+              </div>
+              <div id="manageNotice" class="notice-box"></div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="adminView" class="view" aria-label="Panel de administración">
+          <div id="loginPanel" class="panel narrow-panel">
+            <div class="panel-heading">
+              <p class="section-label">Acceso</p>
+              <h3>Panel de barbería</h3>
+            </div>
+            <label>
+              Email de administración
+              <input id="adminEmail" type="email" autocomplete="email" placeholder="barberia@email.com" />
+            </label>
+            <label>
+              Contraseña / PIN local
+              <input id="adminPin" type="password" autocomplete="current-password" placeholder="Contraseña" />
+            </label>
+            <button id="loginButton" class="primary-action" type="button">Entrar</button>
+            <p class="hint">En demo local usá PIN 1234. Online se usa el usuario creado en Supabase Auth.</p>
+          </div>
+
+          <div id="resetPanel" class="panel narrow-panel hidden">
+            <div class="panel-heading">
+              <p class="section-label">Seguridad</p>
+              <h3>Nueva contraseña</h3>
+            </div>
+            <label>
+              Nueva contraseña
+              <input id="resetPasswordInput" type="password" autocomplete="new-password" minlength="6" />
+            </label>
+            <button id="resetPasswordButton" class="primary-action" type="button">Guardar contraseña</button>
+            <p class="hint">Después de guardarla, volvé a entrar al panel admin con el email y esta contraseña.</p>
+            <p id="resetMessage" class="message" role="status"></p>
+          </div>
+
+          <div id="adminPanel" class="admin-grid hidden">
+            <section class="panel">
+              <div class="panel-heading">
+                <p class="section-label">Planificación</p>
+                <h3>Días y horarios del mes</h3>
+              </div>
+              <label>
+                Mes
+                <input id="adminMonthInput" type="month" />
+              </label>
+              <div class="month-nav">
+                <button id="prevMonthButton" class="secondary-action" type="button">Mes anterior</button>
+                <button id="currentMonthButton" class="secondary-action" type="button">Mes actual</button>
+                <button id="nextMonthButton" class="secondary-action" type="button">Mes siguiente</button>
+              </div>
+              <div class="planner-head">
+                <span>Día</span>
+                <span>Atiende</span>
+                <span>Abre</span>
+                <span>Cierra</span>
+                <span>Descanso</span>
+                <span>Fin</span>
+              </div>
+              <div id="monthPlanner" class="month-planner"></div>
+              <button id="savePlannerButton" class="primary-action" type="button">Guardar planificación</button>
+              <p id="plannerMessage" class="message" role="status"></p>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <p class="section-label">Horarios base</p>
+                <h3>Semana habitual</h3>
+              </div>
+              <div id="hoursEditor" class="hours-editor"></div>
+              <div class="form-grid">
+                <label>
+                  Anticipación máxima
+                  <input id="maxDaysInput" type="number" min="1" max="90" />
+                </label>
+                <label>
+                  Paso de agenda
+                  <select id="slotStepInput">
+                    <option value="15">15 min</option>
+                    <option value="30">30 min</option>
+                    <option value="45">45 min</option>
+                    <option value="60">60 min</option>
+                  </select>
+                </label>
+              </div>
+              <button id="saveConfigButton" class="primary-action" type="button">Guardar horarios base</button>
+              <p id="configMessage" class="message" role="status"></p>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading row-heading">
+                <div>
+                  <p class="section-label">Servicios</p>
+                  <h3>Lista, duración y precio</h3>
+                </div>
+                <button id="addServiceButton" class="secondary-action" type="button">Agregar</button>
+              </div>
+              <div id="servicesEditor" class="services-editor"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <p class="section-label">Avisos</p>
+                <h3>Email de reservas</h3>
+              </div>
+              <label>
+                Email para recibir reservas
+                <input id="notificationEmailInput" type="email" placeholder="reservas@barberia.com" />
+              </label>
+              <label>
+                Dirección del local
+                <input id="businessAddressInput" type="text" placeholder="Ej: Calle 123, Ciudad" />
+              </label>
+              <label>
+                Link de Google Maps
+                <input id="mapsUrlInput" type="url" placeholder="https://maps.google.com/..." />
+              </label>
+              <button id="savePolicyButton" class="primary-action" type="button">Guardar datos</button>
+              <p id="policyMessage" class="message" role="status"></p>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading row-heading">
+                <div>
+                  <p class="section-label">Reservas</p>
+                  <h3>Agenda online</h3>
+                </div>
+              </div>
+              <p class="hint">Las reservas, cancelaciones y bloqueos quedan guardados online y se actualizan en esta pantalla.</p>
+              <label>
+                Ver fecha
+                <input id="adminDateFilter" type="date" />
+              </label>
+              <div class="block-form">
+                <label>
+                  Horario a bloquear
+                  <input id="blockTimeInput" type="time" />
+                </label>
+                <label>
+                  Duración
+                  <select id="blockDurationInput">
+                    <option value="30">30 min</option>
+                    <option value="60">60 min</option>
+                    <option value="90">90 min</option>
+                    <option value="120">120 min</option>
+                  </select>
+                </label>
+                <label>
+                  Motivo opcional
+                  <input id="blockNoteInput" type="text" placeholder="Ej: trámite, descanso, limpieza" />
+                </label>
+                <button id="blockSlotButton" class="secondary-action" type="button">Bloquear horario</button>
+              </div>
+              <p id="blockMessage" class="message" role="status"></p>
+              <div id="blockedSlotsList" class="compact-list"></div>
+              <div id="reservationsList" class="reservations-list"></div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-heading">
+                <p class="section-label">Seguridad</p>
+                <h3>Cambiar contraseña</h3>
+              </div>
+              <label>
+                Nueva contraseña
+                <input id="newPinInput" type="password" minlength="6" />
+              </label>
+              <button id="savePinButton" class="secondary-action" type="button">Actualizar contraseña</button>
+              <p id="pinMessage" class="message" role="status"></p>
+            </section>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="site-credit" aria-label="Marca desarrolladora">
+      <span>Desarrollado por</span>
+      <div class="site-credit-brand" aria-label="DGLAB">
+        <span class="site-credit-mark">@</span>
+        <strong>DGLAB</strong>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./supabase/config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

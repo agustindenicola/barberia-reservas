@@ -1,0 +1,13 @@
+{
+  "name": "barberia-mariano-martinez",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "mkdir -p dist/server dist/supabase && cp index.html app.js styles.css dist/ && cp -R assets .openai dist/ && cp supabase/config.js dist/supabase/config.js && cp server/index.js dist/server/index.js",
+    "start": "python3 -m http.server 8000"
+  },
+  "devDependencies": {
+    "supabase": "^2.113.0"
+  }
+}
